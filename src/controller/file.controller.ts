@@ -10,6 +10,9 @@ export class FileController {
   public async fileUpload(req: Request, res: Response) {
     try {
       const file = req.file;
+      if (!file) {
+        return res.status(404).json({ message: 'Please upload excel file...!' });
+      }
       const workSheetsFromFile = xlsx.parse(path.join(`${__dirname}../../../`, file!.path));
       if (file) {
         const originalName: string = file?.originalname.substr(0, file?.originalname.lastIndexOf('.'));
