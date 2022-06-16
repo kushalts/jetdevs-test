@@ -29,13 +29,23 @@ npm i
 
 - You can also import postman collection from **/postman**
 
-### How to run
+### Running Project on dev
 
 ```bash
 npm run dev
 ```
 
-### How to test
+### Running Project on production
+
+```bash
+tsc
+```
+
+```bash
+npm run prod
+```
+
+### Running Jest Test Cases
 
 ```bash
 npm run test
