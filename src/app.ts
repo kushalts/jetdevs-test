@@ -11,6 +11,12 @@ export class App {
   constructor() {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use((request, response, next) => {
+      response.header('Access-Control-Allow-Origin', '*');
+      response.header('Access-Control-Allow-Headers', '*');
+      response.header('Access-Control-Allow-Methods', '*');
+      next();
+    });
     this.app.use(routes);
     this.app.use(errors());
   }
