@@ -3,10 +3,7 @@ import { sequelize } from '.';
 import { UserInstance, UserCreationAttributes } from '../interface';
 import File from './file.model';
 
-class User
-  extends Model<UserInstance, UserCreationAttributes>
-  implements UserInstance
-{
+class User extends Model<UserInstance, UserCreationAttributes> implements UserInstance {
   id!: number;
   email!: string;
   password!: string;
@@ -45,7 +42,7 @@ User.init(
   {
     sequelize,
     modelName: 'User',
-  }
+  },
 );
 
 User.associate({ User, File });

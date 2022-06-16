@@ -7,11 +7,7 @@ const router = Router({ mergeParams: true });
 
 const authController = new AuthController();
 
-router.post(
-  '/register',
-  celebrate(authSchema.SignupSchema),
-  authController.register
-);
+router.post('/register', celebrate(authSchema.SignupSchema), authController.register);
 
 router.post('/login', celebrate(authSchema.SigninSchema), authController.login);
 
