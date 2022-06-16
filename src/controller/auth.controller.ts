@@ -25,7 +25,7 @@ export class AuthController {
           const data = {
             email: users.email,
             role: users.role,
-            token: token,
+            token: 'Bearer ' + token,
           };
           return res.status(200).json({
             message: 'Signin successfully',

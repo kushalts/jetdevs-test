@@ -10,7 +10,12 @@ export const verifyUser = async (req: MyUserRequest, res: Response, next: NextFu
     return res.status(400).json({ message: 'Inavalid token..!', status: 400 });
   }
 
-  jwt.verify(authorization, environmentConfig.JWT_SECRET, async (err: any, payload: any) => {
+  const scheme = authorization.split(' ')[0];
+  if (scheme !== 'Bearer') {
+    return res.status(400).json({ message: 'Invalid Token..!', status: 400 });
+  }
+  const token = authorization.split(' ')[1];
+  jwt.verify(token, environmentConfig.JWT_SECRET, async (err: any, payload: any) => {
     if (err) {
       return res.status(400).json({ message: 'Inavalid username or password..!', status: 400 });
     }
