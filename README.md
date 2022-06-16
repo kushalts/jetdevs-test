@@ -5,11 +5,15 @@
 - node version - **14.17.3**
 - npm version - **6.14.13**
 
-### How to setup
+## Install
 
-```bash
-npm i
-```
+    $ git clone https://github.com/kushalts/jetdevs-test.git
+    $ cd jetdevs-test
+    $ npm install
+
+### Creating .env file
+
+- Create **.env** file from **.env.example**
 
 ### Database setup steps
 
