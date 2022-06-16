@@ -5,8 +5,6 @@ import { Router } from 'express';
 import { Request, Response } from 'express';
 const router = Router();
 
-// API Routes
-
 router.get('/', (req: Request, res: Response) => {
   res.send('Status Check');
 });

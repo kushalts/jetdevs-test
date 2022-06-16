@@ -108,7 +108,7 @@ export class FileController {
 
       await Product.destroy({ where: { fileId: req.params.id } });
       await File.destroy({ where: { id: req.params.id } });
-      return res.status(200).json('Your File has been deleted successfully...!');
+      return res.status(200).json({ message: 'Your File has been deleted successfully...!' });
     } catch (err) {
       return res.status(500).json({ message: 'Something went wrong' });
     }

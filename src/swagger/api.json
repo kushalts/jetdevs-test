@@ -1,0 +1,571 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "JetDevs APIs",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/",
+      "description": "JetDevs Test"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "errorResponseSchema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "successResponseSchema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      }
+    },
+    "responses": {
+      "AdminUnauthorizedError": {
+        "description": "Access token is missing or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/errorResponseSchema"
+            },
+            "examples": {
+              "ACCESS_TOKEN_INVALID": {
+                "value": {
+                  "code": 401,
+                  "error": "UNAUTHORIZED",
+                  "message": "Invalid authorization token"
+                }
+              },
+              "ACCESS_TOKEN_MISSING": {
+                "value": {
+                  "code": 401,
+                  "error": "UNAUTHORIZED",
+                  "message": "Authorization token required"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AdminValidationError": {
+        "description": "Request Validation error (Message will be changed as validation rules)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/errorResponseSchema"
+            },
+            "examples": {
+              "BAD_REQUEST": {
+                "value": {
+                  "code": 400,
+                  "error": "BAD_REQUEST",
+                  "message": "\"field\" is required"
+                }
+              }
+            }
+          }
+        }
+      },
+      "iseError": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/errorResponseSchema"
+            },
+            "examples": {
+              "ISE": {
+                "value": {
+                  "code": 500,
+                  "error": "ISE",
+                  "message": "Something went wrong."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "AdminAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Endpoint for Register User",
+        "tags": [
+          "Admin"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email",
+                  "password",
+                  "role"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "admin1@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "admin123"
+                  },
+                  "role": {
+                    "type": "string",
+                    "example": "admin"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "SUCCESS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "status": 200,
+                      "message": "User registered successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/AdminValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/iseError"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Endpoint for Login User",
+        "tags": [
+          "Admin"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "admin1@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "admin123"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "SUCCESS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "status": 200,
+                      "message": "Signin successfully",
+                      "response_data": {
+                        "id": 1,
+                        "name": "User1",
+                        "email": "admin1@gmail.com",
+                        "token": "JWT_TOKEN"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/AdminValidationError"
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "code": 401,
+                      "error": "UNAUTHORIZED",
+                      "message": "Email or password is incorrect."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/iseError"
+          }
+        }
+      }
+    },
+    "/file/upload": {
+      "post": {
+        "summary": "Endpoint for uploading file",
+        "tags": [
+          "Admin"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "SUCCESS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "status": 200,
+                      "message": "File uploaded successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/AdminValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/iseError"
+          }
+        }
+      }
+    },
+    "/file/progress/{id}": {
+      "get": {
+        "summary": "Endpoint for getting file progress",
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SUCCESS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "code": 200,
+                      "progress": "100.00 %"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AdminUnauthorizedError"
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "code": 404,
+                      "error": "NOT_FOUND",
+                      "message": "File not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/iseError"
+          }
+        },
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      }
+    },
+    "/file": {
+      "get": {
+        "summary": "Endpoint for getting files",
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "SUCCESS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "code": 200,
+                      "count": 10,
+                      "rows": [
+                        {
+                          "id": 1,
+                          "originalName": "demo",
+                          "fileName": "demo-1655377770406.xlsx",
+                          "totalRecords": 9
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AdminUnauthorizedError"
+          },
+          "500": {
+            "$ref": "#/components/responses/iseError"
+          }
+        },
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      }
+    },
+    "/file/{id}": {
+      "get": {
+        "summary": "Endpoint for reviewing file",
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SUCCESS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "code": 200,
+                      "message": "File reviewed successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AdminUnauthorizedError"
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "code": 404,
+                      "error": "NOT_FOUND",
+                      "message": "File not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/iseError"
+          }
+        },
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Endpoint for deleting file",
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SUCCESS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "code": 200,
+                      "message": "File deleted successfully.",
+                      "data": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/AdminValidationError"
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorResponseSchema"
+                },
+                "examples": {
+                  "SUCCESS": {
+                    "value": {
+                      "code": 404,
+                      "error": "NOT_FOUND",
+                      "message": "File not found for delete."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/iseError"
+          }
+        },
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}

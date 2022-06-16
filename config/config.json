@@ -5,5 +5,12 @@
     "database": "jdtest_dev",
     "host": "localhost",
     "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "",
+    "database": "jdtest_dev",
+    "host": "localhost",
+    "dialect": "mysql"
   }
 }

@@ -7,8 +7,6 @@ export class AuthController {
   public async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      console.log(email);
-      console.log(password);
       if (!email || !password) {
         return res.status(400).json({ message: 'please add all fields..!' });
       }
@@ -35,7 +33,7 @@ export class AuthController {
         }
       }
     } catch (err) {
-      console.log('err - postLogin()', err);
+      return res.status(500).json({ message: 'Something went wrong' });
     }
   }
   public async register(req: Request, res: Response) {
@@ -59,7 +57,7 @@ export class AuthController {
         }
       }
     } catch (err) {
-      console.log('err - postRegister()', err);
+      return res.status(500).json({ message: 'Something went wrong' });
     }
   }
 }

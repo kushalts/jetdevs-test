@@ -12,11 +12,11 @@ export class App {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(routes);
   }
-  public listen() {
-    db.sequelize.sync({ force: false }).then(() => {
-      this.app.listen(environmentConfig.PORT, () => {
-        console.log(`Server running on ${environmentConfig.PORT}`);
-      });
+  public async listen() {
+    await db.sequelize.sync({ force: false });
+    this.app.listen(environmentConfig.PORT, () => {
+      console.log(`Server running on ${environmentConfig.PORT}`);
     });
+    return this.app;
   }
 }
