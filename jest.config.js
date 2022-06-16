@@ -1,6 +1,4 @@
-import type { Config } from '@jest/types';
-
-const config: Config.InitialOptions = {
+const config = {
   coverageDirectory: '<rootDir>/coverage',
   coverageThreshold: {
     global: {
@@ -24,4 +22,4 @@ const config: Config.InitialOptions = {
   },
 };
 
-export default config;
+module.exports = config;
