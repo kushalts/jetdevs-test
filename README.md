@@ -21,6 +21,11 @@
 - Run migration to create tables script using this command - **`npm run migrate`**
 - Run seeder script using this command - **`npm run seed`**, this will add 2 users with admin and user role
 
+### Sample .xlsx File
+
+- I have provided sample .excel file in the **/demo.xlsx** directory
+- In this project, this file will be uploaded to **Products** table, so the file should contain two columns **name, price**
+
 ### Create swagger file
 
 - Run command - **`npm run swagger`**
