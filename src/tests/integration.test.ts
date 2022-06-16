@@ -25,7 +25,7 @@ describe('status integration tests', () => {
         token = res.body.response_data.token;
       });
   });
-  it('Positive Login', async () => {
+  it('Login with Correct Credentials', async () => {
     await request(app)
       .post('/auth/login')
       .set('Accept', 'application/json')
@@ -38,14 +38,14 @@ describe('status integration tests', () => {
         token = res.body.response_data.token;
       });
   });
-  it('Negative Login', async () => {
+  it('Login with Wrong Credentials', async () => {
     await request(app)
       .post('/auth/login')
       .set('Accept', 'application/json')
       .send({ email: 'admin1@gmail.com', password: '12345677' })
       .expect(401);
   });
-  it('Positive Register', async () => {
+  it('Register valid user', async () => {
     await request(app)
       .post('/auth/register')
       .set('Accept', 'application/json')
@@ -55,14 +55,14 @@ describe('status integration tests', () => {
         console.log(res.body);
       });
   });
-  it('Negative Register', async () => {
+  it('Register invalid user', async () => {
     await request(app)
       .post('/auth/login')
       .set('Accept', 'application/json')
       .send({ email: 'admin1@gmail.com', password: '12345677' })
       .expect(401);
   });
-  it('Positive File Lists', async () => {
+  it('GET File Lists with Authentication', async () => {
     await request(app)
       .get('/file')
       .set('Authorization', token)
@@ -72,7 +72,7 @@ describe('status integration tests', () => {
         expect(res.body).toHaveProperty('rows');
       });
   });
-  it('Negative File Lists', async () => {
+  it('GET File Lists without Authentication', async () => {
     await request(app)
       .get('/file')
       .expect(400)
